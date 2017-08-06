@@ -23,7 +23,8 @@ PLEX_REPORT_CONF='/etc/plexReport'
 /bin/echo "Creating /var/log/plexReport.log"
 /usr/bin/touch /var/log/plexReport.log
 
-if [ "$(whereis gem | cut -d' ' -f2)" = "" ]; then
+GEM_BINARY=$(whereis gem | cut -d' ' -f2)
+if [ "$GEM_BINARY" = "" ]; then
     /bin/echo "Installing ruby"
     if [ $(uname) = "FreeBSD" ]; then
         pkg install -y ruby devel/ruby-gems
