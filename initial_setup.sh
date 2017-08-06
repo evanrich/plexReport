@@ -23,7 +23,7 @@ PLEX_REPORT_CONF='/etc/plexReport'
 /bin/echo "Creating /var/log/plexReport.log"
 /usr/bin/touch /var/log/plexReport.log
 
-GEM_BINARY=$(whereis gem | cut -d':' -f2 | tr -d ' ')
+GEM_BINARY=$(whereis gem | cut -d':' -f2 | cut -d' ' -f2)
 if [ "$GEM_BINARY" = "" ]; then
     /bin/echo "Installing ruby"
     if [ $(uname) = "FreeBSD" ]; then
@@ -32,10 +32,10 @@ if [ "$GEM_BINARY" = "" ]; then
         source /etc/os-release
         case $NAME in
             "Red Hat Enterprise Linux Server"|"CentOS Linux") yum install -y ruby ruby-devel make gcc ;;
-            "Debian GNU/Linux"|"Ubuntu") apt-get update && apt-get install -y ruby ruby-devel make gcc;;
+            "Debian GNU/Linux"|"Ubuntu") apt-get update && apt-get install -y ruby ruby-dev make gcc;;
         esac
     fi
-    GEM_BINARY=$(whereis gem | cut -d':' -f2 | tr -d ' ')
+    GEM_BINARY=$(whereis gem | cut -d':' -f2 | cut -d' ' -f2)
     if [ "$GEM_BINARY" = "" ]; then
        echo "Something went wrong while installing ruby!"
        exit 1
@@ -44,7 +44,7 @@ fi
 
 /bin/echo "Installing ruby gem dependency"
 $GEM_BINARY install bundler
-BUNDLER=$(whereis bundle | cut -d':' -f2 | tr -d ' ')
+BUNDLER=$(whereis bundle | cut -d':' -f2 | cut -d' ' -f2)
 $BUNDLER install
 
 /bin/echo "Running /usr/local/sbin/plexreport-setup"
