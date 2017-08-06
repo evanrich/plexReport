@@ -43,7 +43,7 @@ fi
 
 /bin/echo "Installing ruby gem dependency"
 $GEM_BINARY install bundler
-BUNDLER=$(which bundle)
+BUNDLER=$(whereis bundle | cut -d' ' -f2)
 $BUNDLER install
 
 /bin/echo "Running /usr/local/sbin/plexreport-setup"
