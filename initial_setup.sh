@@ -23,7 +23,7 @@ PLEX_REPORT_CONF='/etc/plexReport'
 /bin/echo "Creating /var/log/plexReport.log"
 /usr/bin/touch /var/log/plexReport.log
 
-if ! GEM_BINARY=$(which gem); then
+if [ "$(whereis gem | cut -d' ' -f2)" = "" ]; then
     /bin/echo "Installing ruby"
     if [ $(uname) = "FreeBSD" ]; then
         pkg install -y ruby devel/ruby-gems
@@ -34,7 +34,8 @@ if ! GEM_BINARY=$(which gem); then
             "Debian GNU/Linux"|"Ubuntu") apt-get update && apt-get install -y ruby ;;
         esac
     fi
-    if ! GEM_BINARY=$(which gem); then
+    GEM_BINARY=$(whereis gem | cut -d' ' -f2)
+    if [ "$GEM_BINARY" = "" ]; then
        echo "Something went wrong while installing ruby!"
        exit 1
     fi
