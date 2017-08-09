@@ -59,7 +59,16 @@ read CRON_MINUTE
 
 /bin/echo "Adding /usr/local/sbin/plexreport to crontab"
 /usr/bin/crontab -l > mycron
-/bin/echo "$CRON_MINUTE $CRON_HOUR * * $CRON_DAY /usr/local/sbin/plexreport" >> mycron
+
+# Add PATH only if it crontab doesn't have it
+if grep -q '^PATH' mycron; then
+    sed 's|^PATH.*|PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin|' -i mycron
+else
+    sed '1 i PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin' -i mycron 
+fi
+if ! grep -q '/usr/local/sbin/plexreport$' mycron; then
+    /bin/echo "$CRON_MINUTE $CRON_HOUR * * $CRON_DAY /usr/local/sbin/plexreport" >> mycron
+fi
 /usr/bin/crontab mycron
 /bin/rm mycron
 
