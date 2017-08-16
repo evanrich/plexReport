@@ -14,7 +14,10 @@ PLEX_REPORT_CONF='/etc/plexReport'
 /bin/cp -r etc/* $PLEX_REPORT_CONF
 
 /bin/echo "Installing ruby gem dependency"
-/usr/bin/gem install bundler
-/usr/local/bin/bundle install
+
+GEM_BINARY=$(which gem)
+$GEM_BINARY install bundler
+BUNDLER=$(which bundle)
+$BUNDLER install
 
 /bin/echo "Upgrade complete"
