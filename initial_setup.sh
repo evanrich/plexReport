@@ -57,16 +57,16 @@ fi
 
 # Add PATH only if crontab doesn't have it
 if crontab -l | grep -q '^PATH'; then
-    crontab -l > mycron
-    sed "s|^PATH.*|PATH=$PATH|" -i mycron
+    echo "PATH=$PATH" > mycron
+    crontab -l | grep -v '^PATH' >> mycron
 else
     cat <<EOI > mycron
 PATH=$PATH
 $(crontab -l)
 EOI
-    crontab mycron
-    rm mycron
 fi
+crontab mycron
+rm mycron
 
 # Add plexReport crontab
 if ! crontab -l | grep -q '/usr/local/sbin/plexreport$'; then
